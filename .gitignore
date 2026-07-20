@@ -1,0 +1,20 @@
+# Build outputs
+build/
+*.o
+*.a
+*.elf
+*.bin
+*.hex
+*.map
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
