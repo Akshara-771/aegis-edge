@@ -1,0 +1,60 @@
+cmake:
+  application:
+    configuration-dir: '/home/aksha/Projects/aegis-edge/firmware/app'
+    source-dir: '/home/aksha/Projects/aegis-edge/firmware/app'
+  board:
+    name: 'stm32f4_disco'
+    path:
+     - '/home/aksha/zephyrproject/zephyr/boards/st/stm32f4_disco'
+    qualifiers: 'stm32f407xx'
+    revision: ''
+  devicetree:
+    bindings-dirs:
+     - '/home/aksha/zephyrproject/zephyr/dts/bindings'
+    files:
+     - '/home/aksha/zephyrproject/zephyr/boards/st/stm32f4_disco/stm32f4_disco.dts'
+    include-dirs:
+     - '/home/aksha/zephyrproject/modules/hal/ambiq/dts'
+     - '/home/aksha/zephyrproject/modules/hal/atmel/include'
+     - '/home/aksha/zephyrproject/modules/hal/bouffalolab/include'
+     - '/home/aksha/zephyrproject/modules/hal/bouffalolab/include/zephyr'
+     - '/home/aksha/zephyrproject/modules/hal/gigadevice/include'
+     - '/home/aksha/zephyrproject/modules/hal/infineon/dts'
+     - '/home/aksha/zephyrproject/modules/hal/microchip/include'
+     - '/home/aksha/zephyrproject/modules/hal/microchip/dts'
+     - '/home/aksha/zephyrproject/modules/hal/nuvoton/dts'
+     - '/home/aksha/zephyrproject/modules/hal/nxp/dts'
+     - '/home/aksha/zephyrproject/modules/hal/stm32/dts'
+     - '/home/aksha/zephyrproject/modules/hal/ti/dts'
+     - '/home/aksha/Projects/aegis-edge/firmware/app/include'
+     - '/home/aksha/zephyrproject/zephyr/include'
+     - '/home/aksha/zephyrproject/zephyr/include/zephyr'
+     - '/home/aksha/zephyrproject/zephyr/dts/common'
+     - '/home/aksha/zephyrproject/zephyr/dts/vendor'
+     - '/home/aksha/zephyrproject/zephyr/dts/rx'
+     - '/home/aksha/zephyrproject/zephyr/dts/x86'
+     - '/home/aksha/zephyrproject/zephyr/dts/xtensa'
+     - '/home/aksha/zephyrproject/zephyr/dts/sparc'
+     - '/home/aksha/zephyrproject/zephyr/dts/riscv'
+     - '/home/aksha/zephyrproject/zephyr/dts/posix'
+     - '/home/aksha/zephyrproject/zephyr/dts/arm64'
+     - '/home/aksha/zephyrproject/zephyr/dts/arm'
+     - '/home/aksha/zephyrproject/zephyr/dts/arc'
+     - '/home/aksha/zephyrproject/zephyr/dts'
+  kconfig:
+    files:
+     - '/home/aksha/zephyrproject/zephyr/boards/st/stm32f4_disco/stm32f4_disco_defconfig'
+     - '/home/aksha/Projects/aegis-edge/firmware/app/prj.conf'
+    user-files:
+     - '/home/aksha/Projects/aegis-edge/firmware/app/prj.conf'
+  toolchain:
+    name: 'zephyr'
+    path: '/home/aksha/zephyr-sdk-1.0.1'
+  zephyr:
+    version: '4.4.99'
+    zephyr-base: '/home/aksha/zephyrproject/zephyr'
+version: '0.1.0'
+west:
+  command: '/home/aksha/zephyr-venv/bin/west build -b stm32f4_disco /home/aksha/Projects/aegis-edge/firmware/app -d /home/aksha/Projects/aegis-edge/firmware/app/build-tflm --cmake-only'
+  topdir: '/home/aksha/zephyrproject'
+  version: '1.5.0'

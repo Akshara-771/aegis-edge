@@ -1,8 +1,14 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
-int sensor_get_temperature(void);   // Returns temperature ×10
-int sensor_get_voltage(void);       // Returns voltage ×100
-int sensor_get_rpm(void);
+typedef struct
+{
+    int temperature;   // x10
+    int voltage;       // x100
+    int rpm;
+
+} sensor_data_t;
+
+void sensor_read(sensor_data_t *data);
 
 #endif

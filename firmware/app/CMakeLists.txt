@@ -8,6 +8,11 @@ target_sources(app PRIVATE
     src/main.c
     src/sensor.c
     src/fault.c
+    src/fault_detector.c
+    src/telemetry.c
+    src/config.c
+    src/model_data.c
+    src/ml_inference.cc
 )
 
 target_include_directories(app PRIVATE

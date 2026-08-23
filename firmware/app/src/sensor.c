@@ -5,45 +5,39 @@ static int temperature = 248;
 static int voltage = 330;
 static int rpm = 1500;
 
-int sensor_get_temperature(void)
+void sensor_read(sensor_data_t *data)
 {
-    switch (fault_get())
+    if (fault_get() == FAULT_OVERHEAT)
     {
-        case FAULT_OVERHEAT:
-            return 950;     // 95.0°C
-
-        default:
-            temperature++;
-
-            if (temperature > 320)
-            {
-                temperature = 248;
-            }
-
-            return temperature;
+        data->temperature = 950;
     }
-}
-
-int sensor_get_voltage(void)
-{
-    switch (fault_get())
+    else
     {
-        case FAULT_LOW_VOLTAGE:
-            return 220;     // 2.20V
+        temperature++;
 
-        default:
-            return voltage;
+        if (temperature > 320)
+        {
+            temperature = 248;
+        }
+
+        data->temperature = temperature;
     }
-}
 
-int sensor_get_rpm(void)
-{
-    switch (fault_get())
+    if (fault_get() == FAULT_LOW_VOLTAGE)
     {
-        case FAULT_HIGH_RPM:
-            return 4500;
+        data->voltage = 220;
+    }
+    else
+    {
+        data->voltage = voltage;
+    }
 
-        default:
-            return rpm;
+    if (fault_get() == FAULT_HIGH_RPM)
+    {
+        data->rpm = 4500;
+    }
+    else
+    {
+        data->rpm = rpm;
     }
 }
