@@ -12,9 +12,15 @@ __pycache__/
 *.pyc
 .venv/
 
+# ML virtual environment
+ml-venv/
+
 # IDE
 .vscode/
 .idea/
 
 # Logs
 *.log
+
+# Zephyr build outputs
+firmware/app/build-tflm/
