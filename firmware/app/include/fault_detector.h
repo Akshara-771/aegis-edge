@@ -2,7 +2,8 @@
 #define FAULT_DETECTOR_H
 
 #include "sensor.h"
+#include "fault.h"
 
-void fault_detector_run(sensor_data_t *data);
+fault_type_t fault_detector_run(const sensor_data_t *data);
 
 #endif
