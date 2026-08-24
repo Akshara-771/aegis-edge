@@ -1,0 +1,9 @@
+mach create "aegis-tflm"
+
+machine LoadPlatformDescription @platforms/boards/stm32f4_discovery.repl
+
+sysbus LoadELF @/home/aksha/Projects/aegis-edge/firmware/app/build-tflm/zephyr/zephyr.elf
+
+showAnalyzer sysbus.usart2
+
+start
