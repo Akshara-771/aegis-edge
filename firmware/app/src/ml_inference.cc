@@ -128,8 +128,8 @@ extern "C" ml_fault_t ml_predict(
         rpm / 5000.0f
     };
 
-    const float input_scale = 0.003918295726180077f;
-    const int input_zero_point = -128;
+    const float input_scale = input_tensor->params.scale;
+    const int input_zero_point = input_tensor->params.zero_point;
 
     for (int i = 0; i < 3; ++i) {
 
