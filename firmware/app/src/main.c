@@ -95,7 +95,7 @@ int main(void)
 
         fault_type_t rule_result = fault_detector_run(&sensor);
         printk("RULE PREDICTION: %s\n",telemetry_fault_name(rule_result));
-        telemetry_log(&sensor);
+        telemetry_log(&sensor, ml_result, rule_result);
 
         printk("------------------------------\n");
 

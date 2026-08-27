@@ -1,0 +1,548 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #0b0f14;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: #0b0f14;
+  color: #e8edf2;
+}
+
+.app {
+  min-height: 100vh;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 32px 36px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+
+.header p {
+  margin: 7px 0 0;
+  color: #7f8b99;
+  font-size: 16px;
+}
+
+.connection {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 16px;
+  border-radius: 24px;
+  background: #151b23;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #68717c;
+}
+
+.connection.online {
+  color: #35d07f;
+}
+
+.connection.online .status-dot {
+  background: #35d07f;
+}
+
+.connection.offline {
+  color: #68717c;
+}
+
+/* =========================
+   SYSTEM STATUS
+========================= */
+
+.system-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 28px 32px;
+  margin-bottom: 18px;
+
+  border: 1px solid #202833;
+  border-radius: 15px;
+  background: #11161d;
+}
+
+.system-status.normal {
+  border-left: 5px solid #35d07f;
+}
+
+.system-status.fault {
+  border-left: 5px solid #ff5c5c;
+}
+
+.status-label {
+  color: #7f8b99;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.system-status h2 {
+  margin: 8px 0 0;
+  font-size: 27px;
+}
+
+.fault-name {
+  font-size: 19px;
+  font-weight: 700;
+}
+
+/* =========================
+   SENSOR CARDS
+========================= */
+
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.card {
+  padding: 24px;
+  border: 1px solid #202833;
+  border-radius: 15px;
+  background: #11161d;
+}
+
+.card-label {
+  color: #7f8b99;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.card strong {
+  display: block;
+  margin-top: 13px;
+  font-size: 31px;
+  font-weight: 700;
+}
+
+/* =========================
+   PREDICTIONS
+========================= */
+
+.prediction-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 32px;
+}
+
+.prediction-card {
+  padding: 24px;
+  border: 1px solid #202833;
+  border-radius: 15px;
+  background: #11161d;
+}
+
+.prediction-card.final {
+  border-left: 5px solid #7c8cff;
+}
+
+.prediction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: #a7b0bb;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.prediction-card strong {
+  display: block;
+  margin-top: 19px;
+  font-size: 26px;
+}
+
+.prediction-description {
+  margin-top: 8px;
+  color: #66717e;
+  font-size: 13px;
+}
+
+.badge {
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-size: 9px;
+}
+
+.badge.ml {
+  background: #1b2535;
+  color: #8ea8ff;
+}
+
+.badge.rule {
+  background: #22231e;
+  color: #d1bd72;
+}
+
+/* =========================
+   SECTION HEADERS
+========================= */
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 22px 24px;
+  border-bottom: 1px solid #202833;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.section-heading p {
+  margin: 6px 0 0;
+  color: #697583;
+  font-size: 13px;
+}
+
+.section-heading > span {
+  color: #697583;
+  font-size: 12px;
+}
+
+/* =========================
+   LIVE SENSOR CHARTS
+========================= */
+
+.charts-section {
+  margin-bottom: 32px;
+
+  border: 1px solid #202833;
+  border-radius: 15px;
+  background: #11161d;
+
+  overflow: hidden;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+
+  padding: 18px;
+}
+
+.chart-card {
+  position: relative;
+
+  padding: 18px;
+
+  border: 1px solid #202833;
+  border-radius: 12px;
+
+  background: #0e1319;
+}
+
+.chart-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.chart-heading h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.chart-heading p {
+  margin: 5px 0 0;
+  color: #697583;
+  font-size: 11px;
+}
+
+.chart-heading strong {
+  font-size: 18px;
+}
+
+.chart {
+  width: 100%;
+  height: 190px;
+  margin-top: 10px;
+  overflow: visible;
+}
+
+.grid-line {
+  stroke: #202833;
+  stroke-width: 1;
+}
+
+.chart-line {
+  stroke: #7c8cff;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.chart-point {
+  fill: #7c8cff;
+}
+
+.chart-scale {
+  position: absolute;
+
+  right: 12px;
+  top: 78px;
+  bottom: 40px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  color: #596572;
+  font-size: 9px;
+}
+
+.chart-empty {
+  height: 190px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #68717c;
+  font-size: 12px;
+}
+
+/* =========================
+   FAULT EVENTS
+========================= */
+
+.events-section {
+  margin-bottom: 32px;
+
+  border: 1px solid #202833;
+  border-radius: 15px;
+  background: #11161d;
+
+  overflow: hidden;
+}
+
+.events-list {
+  padding: 0 24px;
+}
+
+.event-row {
+  display: grid;
+  grid-template-columns: 12px 2fr 1.3fr 1.3fr 1fr;
+  gap: 18px;
+  align-items: center;
+
+  padding: 17px 0;
+
+  border-top: 1px solid #1b222b;
+}
+
+.event-indicator {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+  background: #ff5c5c;
+}
+
+.event-main {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.event-main strong {
+  color: #ff6b6b;
+}
+
+.event-main span {
+  color: #66717e;
+  font-size: 11px;
+}
+
+.event-result {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-result span {
+  color: #66717e;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.event-result strong {
+  font-size: 12px;
+}
+
+.event-status {
+  color: #35d07f;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* =========================
+   TELEMETRY TABLE
+========================= */
+
+.history-section {
+  margin-bottom: 32px;
+
+  border: 1px solid #202833;
+  border-radius: 15px;
+  background: #11161d;
+
+  overflow: hidden;
+}
+
+.telemetry-table {
+  overflow-x: auto;
+}
+
+.table-header,
+.table-row {
+  display: grid;
+
+  grid-template-columns:
+    1.1fr
+    1fr
+    1fr
+    0.8fr
+    1.2fr
+    1.2fr
+    1.2fr;
+
+  min-width: 850px;
+
+  gap: 15px;
+  align-items: center;
+
+  padding: 13px 24px;
+}
+
+.table-header {
+  color: #697583;
+  background: #0e1319;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.table-row {
+  color: #b7c0ca;
+  font-size: 12px;
+
+  border-top: 1px solid #1b222b;
+}
+
+.fault-text {
+  color: #ff6b6b;
+  font-weight: 700;
+}
+
+.empty-state {
+  padding: 50px;
+
+  text-align: center;
+
+  color: #68717c;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+  padding: 8px 0 20px;
+
+  color: #4f5965;
+
+  text-align: center;
+  font-size: 11px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sensor-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .prediction-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .app {
+    padding: 20px;
+  }
+
+  .header {
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .header h1 {
+    font-size: 25px;
+  }
+
+  .sensor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-row {
+    grid-template-columns: 12px 1fr;
+  }
+
+  .event-result,
+  .event-status {
+    grid-column: 2;
+  }
+}

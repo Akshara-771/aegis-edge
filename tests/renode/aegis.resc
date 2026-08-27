@@ -4,6 +4,8 @@ machine LoadPlatformDescription @platforms/boards/stm32f4_discovery.repl
 
 sysbus LoadELF @firmware/app/build-tflm/zephyr/zephyr.elf
 
+sysbus.usart2 CreateFileBackend @/tmp/aegis_uart.log true
+
 showAnalyzer sysbus.usart2
 
 start
