@@ -1,8 +1,6 @@
 import numpy as np
 import tensorflow as tf
 
-MODEL_FILE = "aegis_fault_model_int8.tflite"
-
 FEATURE_SCALE = np.array(
     [100.0, 4.0, 5000.0],
     dtype=np.float32
@@ -16,32 +14,49 @@ classes = {
 }
 
 
-# --------------------------------------------------
-# Load INT8 model
-# --------------------------------------------------
-
-interpreter = tf.lite.Interpreter(
-    model_path=MODEL_FILE
-)
-
-interpreter.allocate_tensors()
-
-input_details = interpreter.get_input_details()
-output_details = interpreter.get_output_details()
-
-print("Output quantization:",
-      output_details[0]["quantization"])
-
-input_scale, input_zero_point = (
-    input_details[0]["quantization"]
-)
+MODELS = {
+    "BASELINE": "aegis_fault_model_baseline_int8.tflite",
+    "TRAJECTORY": "aegis_fault_model_trajectory_int8.tflite",
+}
 
 
-# --------------------------------------------------
-# ML prediction helper
-# --------------------------------------------------
+def load_model(filename):
+    interpreter = tf.lite.Interpreter(
+        model_path=filename
+    )
 
-def predict(sample):
+    interpreter.allocate_tensors()
+
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+
+    return interpreter, input_details, output_details
+
+
+loaded_models = {}
+
+for name, filename in MODELS.items():
+
+    interpreter, input_details, output_details = load_model(
+        filename
+    )
+
+    loaded_models[name] = (
+        interpreter,
+        input_details,
+        output_details
+    )
+
+
+def predict(model_name, sample):
+
+    interpreter, input_details, output_details = (
+        loaded_models[model_name]
+    )
+
+    input_scale, input_zero_point = (
+        input_details[0]["quantization"]
+    )
 
     normalized = sample / FEATURE_SCALE
 
@@ -66,21 +81,8 @@ def predict(sample):
         output_details[0]["index"]
     )[0]
 
-    output_scale, output_zero_point = (
-    output_details[0]["quantization"]
-    )
+    return int(np.argmax(output))
 
-    scores = (
-    output.astype(np.float32) - output_zero_point
-    ) * output_scale
-
-    prediction = int(np.argmax(output))
-
-    return prediction, output
-
-# --------------------------------------------------
-# Rule detector
-# --------------------------------------------------
 
 def rule_predict(sample):
 
@@ -98,39 +100,62 @@ def rule_predict(sample):
     return 0
 
 
-# --------------------------------------------------
-# Run boundary experiment
-# --------------------------------------------------
-
 def run_test(name, samples):
 
     print()
-    print("=" * 70)
+    print("=" * 100)
     print(name)
-    print("=" * 70)
+    print("=" * 100)
+
+    print(
+        f"{'TEMP':>7} {'VOLT':>7} {'RPM':>7} | "
+        f"{'BASELINE':<14} "
+        f"{'TRAJECTORY':<14} "
+        f"{'RULE':<14} "
+        f"RESULT"
+    )
+
+    disagreements = 0
 
     for sample in samples:
 
-        ml_result, probabilities = predict(sample)
-        rule_result = rule_predict(sample)
+        baseline = predict(
+            "BASELINE",
+            sample
+        )
 
-        agreement = (
-            "AGREE"
-            if ml_result == rule_result
-            else "DISAGREE"
+        trajectory = predict(
+            "TRAJECTORY",
+            sample
         )
-        probability_text = " | ".join(f"{classes[i]}={probabilities[i]:.3f}"
-        for i in range(len(probabilities))
-        )
+
+        rule = rule_predict(sample)
+
+        if baseline != trajectory:
+            result = "MODEL DIFFER"
+            disagreements += 1
+
+        elif baseline != rule:
+            result = "ML/RULE DIFF"
+
+        else:
+            result = "AGREE"
 
         print(
-            f"TEMP={sample[0]:6.1f} C | "
-            f"VOLT={sample[1]:.3f} V | "
-            f"RPM={sample[2]:6.0f} | "
-            f"ML={classes[ml_result]:12s} | "
-            f"RULE={classes[rule_result]:12s} | "
-            f"{agreement}"
+            f"{sample[0]:7.1f} "
+            f"{sample[1]:7.3f} "
+            f"{sample[2]:7.0f} | "
+            f"{classes[baseline]:<14} "
+            f"{classes[trajectory]:<14} "
+            f"{classes[rule]:<14} "
+            f"{result}"
         )
+
+    print()
+    print(
+        f"Model disagreements: "
+        f"{disagreements}/{len(samples)}"
+    )
 
 
 # --------------------------------------------------
@@ -139,17 +164,17 @@ def run_test(name, samples):
 
 temperature_samples = np.array([
     [30.0, 3.30, 1500],
-    [32.0, 3.30, 1500],
-    [33.0, 3.30, 1500],
     [40.0, 3.30, 1500],
     [50.0, 3.30, 1500],
     [60.0, 3.30, 1500],
     [70.0, 3.30, 1500],
     [75.0, 3.30, 1500],
+    [78.0, 3.30, 1500],
+    [79.0, 3.30, 1500],
     [80.0, 3.30, 1500],
     [81.0, 3.30, 1500],
     [82.0, 3.30, 1500],
-    [83.0, 3.30, 1500],
+    [85.0, 3.30, 1500],
     [90.0, 3.30, 1500],
 ], dtype=np.float32)
 
@@ -168,7 +193,6 @@ voltage_samples = np.array([
     [25.0, 3.00, 1500],
     [25.0, 3.01, 1500],
     [25.0, 3.10, 1500],
-    [25.0, 3.19, 1500],
     [25.0, 3.20, 1500],
     [25.0, 3.30, 1500],
     [25.0, 3.40, 1500],
@@ -181,7 +205,6 @@ voltage_samples = np.array([
 
 rpm_samples = np.array([
     [25.0, 3.30, 1500],
-    [25.0, 3.30, 1600],
     [25.0, 3.30, 1700],
     [25.0, 3.30, 2000],
     [25.0, 3.30, 2500],
@@ -197,7 +220,7 @@ rpm_samples = np.array([
 
 
 # --------------------------------------------------
-# Execute experiments
+# Run comparisons
 # --------------------------------------------------
 
 run_test(

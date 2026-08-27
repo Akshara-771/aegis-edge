@@ -5,6 +5,7 @@
 
 #include "zephyr/kernel.h"
 #include "zephyr/sys/printk.h"
+#include "zephyr/timing/timing.h"
 
 #include "model_data.h"
 
@@ -25,6 +26,12 @@ TfLiteTensor* output_tensor = nullptr;
 tflite::MicroMutableOpResolver<2> resolver;
 
 bool initialized = false;
+
+uint32_t inference_count = 0;
+uint32_t inference_min_cycles = UINT32_MAX;
+uint32_t inference_max_cycles = 0;
+uint64_t inference_total_cycles = 0;
+
 
 }  // namespace
 
@@ -128,8 +135,8 @@ extern "C" ml_fault_t ml_predict(
         rpm / 5000.0f
     };
 
-    const float input_scale = 0.003918295726180077f;
-    const int input_zero_point = -128;
+    const float input_scale = input_tensor->params.scale;
+    const int input_zero_point = input_tensor->params.zero_point;
 
     for (int i = 0; i < 3; ++i) {
 
@@ -152,11 +159,52 @@ extern "C" ml_fault_t ml_predict(
 
     }
 
-    if (interpreter->Invoke() != kTfLiteOk) {
-        printk("Aegis ML: Invoke() failed\n");
-        return ML_FAULT_NORMAL;
-    }
+    uint32_t start_cycles = k_cycle_get_32();
 
+if (interpreter->Invoke() != kTfLiteOk) {
+    printk("Aegis ML: Invoke() failed\n");
+    return ML_FAULT_NORMAL;
+}
+
+uint32_t elapsed_cycles = k_cycle_get_32() - start_cycles;
+
+inference_count++;
+inference_total_cycles += elapsed_cycles;
+
+if (elapsed_cycles < inference_min_cycles) {
+    inference_min_cycles = elapsed_cycles;
+}
+
+if (elapsed_cycles > inference_max_cycles) {
+    inference_max_cycles = elapsed_cycles;
+}
+
+uint32_t elapsed_us =
+    k_cyc_to_us_near32(elapsed_cycles);
+
+printk("TFLM INFERENCE: %u us\n", elapsed_us);
+
+if (inference_count % 10 == 0) {
+    uint32_t avg_cycles =
+        inference_total_cycles / inference_count;
+
+    uint32_t avg_us =
+        k_cyc_to_us_near32(avg_cycles);
+
+    uint32_t min_us =
+        k_cyc_to_us_near32(inference_min_cycles);
+
+    uint32_t max_us =
+        k_cyc_to_us_near32(inference_max_cycles);
+
+    printk(
+        "TFLM LATENCY: samples=%u min=%u us avg=%u us max=%u us\n",
+        inference_count,
+        min_us,
+        avg_us,
+        max_us
+    );
+}
 
     int best_index = 0;
     int8_t best_value = output_tensor->data.int8[0];
