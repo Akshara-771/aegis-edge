@@ -255,8 +255,6 @@ The current quantitative validation does not yet include:
 - Large-scale fault-injection statistics
 - Physical STM32 hardware inference latency
 
-These should not be claimed as measured results until separately validated.
-
 ## Documentation
 
 Verified project measurements and validation notes are maintained in:
