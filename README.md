@@ -4,6 +4,14 @@
 
 Aegis Edge is an embedded AI fault-detection system that combines a compact INT8 TinyML model with deterministic safety rules on Zephyr RTOS. The system runs inference locally, detects abnormal sensor conditions, emits structured telemetry, and exposes the results through a live web dashboard.
 
+| Main Dashboard | Live Sensor Trends |
+|:---:|:---:|
+| <img src="screenshots/Main_Dashboard.jpg" width="500"> | <img src="screenshots/Graphs.jpg" width="500"> |
+
+| Fault Event Monitoring | Raw Live Telemetry |
+|:---:|:---:|
+| <img src="screenshots/Fault_Events.jpg" width="500"> | <img src="screenshots/Live_Telemetry.jpg" width="500"> |
+
 ## Overview
 
 Aegis Edge monitors three sensor signals:
